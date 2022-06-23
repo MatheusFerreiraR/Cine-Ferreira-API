@@ -35,14 +35,6 @@ public class Movie {
 	@Column(name = "sinopse")
 	private String synopsis;
 	
-	@Size(min = 3)
-	@Column(name = "link_capa")
-	private String linkcover;
-	
-	@Size(min = 3)
-	@Column(name = "link_trailer")
-	private String linkTrailer;
-	
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "cat_filme")

@@ -2,6 +2,7 @@ package br.edu.utfpr.tdsapi.model;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -34,11 +35,15 @@ public class UserModel {
 	private String email;
 	
 	@NotNull
-	@Size(min = 5, max = 50)
+	@Size(min = 5, max = 255)
 	private String senha;
 	
+	@NotNull
+	@Column(name = "id_position")
+	private Long idPosition;
+	
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_rules", joinColumns = @JoinColumn(name = "id_user"),
+	@JoinTable(name = "position_user_rules", joinColumns = @JoinColumn(name = "id_position"),
 		inverseJoinColumns = @JoinColumn(name = "id_rules"))
 	private List<Rules> rules;
 	
@@ -75,6 +80,12 @@ public class UserModel {
 	}
 	public List<Rules> getRules() {
 		return rules;
+	}
+	public Long getIdPosition() {
+		return idPosition;
+	}
+	public void setIdPosition(Long idPosition) {
+		this.idPosition = idPosition;
 	}
 	public void setRules(List<Rules> rules) {
 		this.rules = rules;

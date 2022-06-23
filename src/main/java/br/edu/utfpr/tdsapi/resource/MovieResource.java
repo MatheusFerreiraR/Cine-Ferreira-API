@@ -13,13 +13,17 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.utfpr.tdsapi.model.Movie;
+import br.edu.utfpr.tdsapi.model.UserModel;
 import br.edu.utfpr.tdsapi.repository.MovieRepository;
+import br.edu.utfpr.tdsapi.service.MovieService;
+import br.edu.utfpr.tdsapi.service.UserService;
 
 @RestController
 @RequestMapping("/movie")
@@ -28,8 +32,11 @@ public class MovieResource {
 	@Autowired
 	private MovieRepository MovieRepository;	
 	
+	@Autowired
+	private MovieService movieService;
+	
 	@GetMapping
-	@PreAuthorize("hasAuthority('RULE_PESQUISAR_CAT_FILME') and #oauth2.hasScope('read')")
+	//@PreAuthorize("hasAuthority('RULE_PESQUISAR_CAT_FILME') and #oauth2.hasScope('read')")
 	public List<Movie> listFilms() {
 		return MovieRepository.findAll();
 	}
@@ -49,10 +56,17 @@ public class MovieResource {
 		return movie.isPresent() ? ResponseEntity.ok(movie) : ResponseEntity.notFound().build();
 	}
 	
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateUserById(@PathVariable Long id, @RequestBody Movie movie) {
+		
+		return ResponseEntity.ok(movieService.updateMovie(id, movie));
+	}
+	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@PreAuthorize("hasAuthority('RULE_CADASTRAR_CAT_FILME') and #oauth2.hasScope('write')")
 	public void deleteMovieById(@PathVariable Long id) {
 		MovieRepository.deleteById(id);
 	}
+	
 }

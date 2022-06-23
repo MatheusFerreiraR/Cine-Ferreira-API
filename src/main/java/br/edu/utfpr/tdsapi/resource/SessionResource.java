@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,7 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 import br.edu.utfpr.tdsapi.execeptionhandler.ExceptionHandler.Error;
+import br.edu.utfpr.tdsapi.model.MovieTheater;
 import br.edu.utfpr.tdsapi.model.Session;
+import br.edu.utfpr.tdsapi.model.UserModel;
+import br.edu.utfpr.tdsapi.model.bodyRequest.BodyRequestGetHours;
 import br.edu.utfpr.tdsapi.repository.SessionRepository;
 import br.edu.utfpr.tdsapi.repository.filter.SessionFilter;
 import br.edu.utfpr.tdsapi.service.SessionService;
@@ -48,11 +52,6 @@ public class SessionResource {
 		return sessionRepository.findAll();
 	}
 	
-	@GetMapping("with-filter")
-	public Page<Session> listSessionsWithFilter(SessionFilter sessionFilter, Pageable pageable) {
-		return sessionRepository.listSessionsWithfilter(sessionFilter, pageable);
-	}
-	
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PreAuthorize("hasAuthority('RULE_CADASTRAR_SESSAO') and #oauth2.hasScope('write')")
@@ -74,6 +73,16 @@ public class SessionResource {
 		sessionRepository.deleteById(id);
 	}
 	
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateSessionById(@PathVariable Long id, @RequestBody Session session) {
+		return ResponseEntity.ok(sessionService.updateSession(id, session));
+	}
+	
+	@PostMapping("/hours")
+	@PreAuthorize("hasAuthority('RULE_CADASTRAR_SESSAO') and #oauth2.hasScope('write')")
+	public List<String> getHorsAvailable(@RequestBody BodyRequestGetHours bodyRequestGetHours) {
+		return sessionRepository.listHorsAvailable(bodyRequestGetHours);
+	}
 	
 	@org.springframework.web.bind.annotation.ExceptionHandler({ MovieTheatherNotAvailableException.class })
 	public ResponseEntity<Object> handleEmptyResultDataAcessException(MovieTheatherNotAvailableException ex, WebRequest request) {

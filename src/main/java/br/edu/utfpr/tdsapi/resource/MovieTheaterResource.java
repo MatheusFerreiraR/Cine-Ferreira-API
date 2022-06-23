@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,13 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.utfpr.tdsapi.model.MovieTheater;
 import br.edu.utfpr.tdsapi.repository.MovieTheaterRepository;
+import br.edu.utfpr.tdsapi.service.MovieTheaterService;
 
 @RestController
-@RequestMapping("/movie-theather")
+@RequestMapping("/movie-theater")
 public class MovieTheaterResource {
 	
 	@Autowired
 	private MovieTheaterRepository movieTheaterRepository;	
+	
+	@Autowired
+	private MovieTheaterService movieTheaterService;
 	
 	@GetMapping
 	@PreAuthorize("hasAuthority('RULE_PESQUISAR_SALA') and #oauth2.hasScope('read')")
@@ -54,5 +59,11 @@ public class MovieTheaterResource {
 	@PreAuthorize("hasAuthority('RULE_CADASTRAR_SALA') and #oauth2.hasScope('write')")
 	public void deleteMovieTheaterById(@PathVariable Long id) {
 		movieTheaterRepository.deleteById(id);
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateUserById(@PathVariable Long id, @RequestBody MovieTheater movieTheater) {
+		
+		return ResponseEntity.ok(movieTheaterService.updateMovieTheater(id, movieTheater));
 	}
 }

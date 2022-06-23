@@ -29,7 +29,7 @@ public class CatMovieResource {
 	private CatMovieRepository catMovieRepository;	
 	
 	@GetMapping
-	@PreAuthorize("hasAuthority('RULE_PESQUISAR_CAT_FILME') and #oauth2.hasScope('read')")
+	//@PreAuthorize("hasAuthority('RULE_PESQUISAR_CAT_FILME') and #oauth2.hasScope('read')")
 	public List<CatMovie> listCatFilmes() {
 		return catMovieRepository.findAll();
 	}

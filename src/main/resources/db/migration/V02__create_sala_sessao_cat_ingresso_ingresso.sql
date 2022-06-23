@@ -1,6 +1,5 @@
 CREATE TABLE sala (
 	id BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
-	disponibilidade boolean NOT NULL,
 	qtd_assento INTEGER(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

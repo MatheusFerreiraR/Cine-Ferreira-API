@@ -39,5 +39,5 @@ public class Session {
 
 	@NotNull
 	@Column(name = "date_time")
-	private LocalDateTime dateTime;
+	private String dateTime;
 }
