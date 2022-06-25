@@ -44,7 +44,7 @@ public class UserModel {
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "position_user_rules", joinColumns = @JoinColumn(name = "id_position"),
-		inverseJoinColumns = @JoinColumn(name = "id_rules"))
+		inverseJoinColumns = @JoinColumn(name = "id_position"))
 	private List<Rules> rules;
 	
 	
